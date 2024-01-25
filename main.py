@@ -5,8 +5,8 @@ class App:
     def __init__(self, root):
         #tela inicial
         self.root = root
-        self.root.title('Cadastro de Miniaturas')
-        self.root.geometry("300x250")
+        self.root.title('Registro Miniaturas')
+        self.root.geometry("300x225")
         self.root.resizable(width=False, height=False)
 
         #conteiner principal
@@ -25,18 +25,18 @@ class App:
     #tela inicial com o menu
     def tela_inicial(self):
         self.muda_janela()
-        
-        label_tela_inicial = tk.Label(self.container_principal, text="Cadastro de Miniaturas")
-        label_tela_inicial.pack(pady=50)
+
+        label_tela_inicial = tk.Label(self.container_principal, text="Sistema de Cadastro de Miniaturas", font=('Calibri', 13))
+        label_tela_inicial.place(width=250, height=40, x=25, y=10)
 
         botao_pagina_1 = tk.Button(self.container_principal, text="Ir para Nova Página 1", command=self.pagina_1)
-        botao_pagina_1.pack(pady=10)
+        botao_pagina_1.place(width=200, height=40, x=50, y=60)
 
         botao_pagina_2 = tk.Button(self.container_principal, text="Ir para Nova Página 2", command=self.pagina_2)
-        botao_pagina_2.pack(pady=10)
+        botao_pagina_2.place(width=200, height=40, x=50, y=110)
 
         botao_pagina_3 = tk.Button(self.container_principal, text="Ir para Nova Página 3", command=self.pagina_3)
-        botao_pagina_3.pack(pady=10)
+        botao_pagina_3.place(width=200, height=40, x=50, y=160)
 
 
 
@@ -66,17 +66,6 @@ class App:
 
         botao_voltar = tk.Button(self.container_principal, text="Voltar à Tela Inicial", command=self.tela_inicial)
         botao_voltar.pack(pady=30)
-
-
-        
-    
-
-
-        
-
-    
-
-
 
 
 #inicia a aplicacao
