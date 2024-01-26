@@ -1,4 +1,16 @@
 import tkinter as tk
+import mysql.connector
+
+conexao = mysql.connector.connect(
+    host = 'localhost',
+    user = 'root',
+    password = '123456',
+    database = 'miniaturas',
+)
+cursor = conexao.cursor()
+
+bg = "#34495E"
+letras = "#FDFEFE"
 
 class App:
     #configura o metodo da classe principal
@@ -12,6 +24,10 @@ class App:
         #conteiner principal
         self.container_principal = tk.Frame(root)
         self.container_principal.pack(expand=True, fill="both")
+        self.container_principal.configure(background=bg  )
+
+        #serve para armazenar o tamanho do menu
+        self.tamanho_inicial = "300x225"
 
         #inicia a tela inicial com o menu
         self.tela_inicial()
@@ -26,7 +42,7 @@ class App:
     def tela_inicial(self):
         self.muda_janela()
 
-        label_tela_inicial = tk.Label(self.container_principal, text="Sistema de Cadastro de Miniaturas", font=('Calibri', 13))
+        label_tela_inicial = tk.Label(self.container_principal, text="Sistema de Cadastro de Miniaturas", font=('Calibri', 13), bg=bg, fg=letras )
         label_tela_inicial.place(width=250, height=40, x=25, y=10)
 
         botao_pagina_1 = tk.Button(self.container_principal, text="Consultar Coleção", command=self.pagina_1)
@@ -35,35 +51,30 @@ class App:
         botao_pagina_2 = tk.Button(self.container_principal, text="Cadastrar Miniatura", command=self.pagina_2)
         botao_pagina_2.place(width=200, height=40, x=50, y=110)
 
-        botao_pagina_3 = tk.Button(self.container_principal, text="Excluir Miniatura", command=self.pagina_3)
+        botao_pagina_3 = tk.Button(self.container_principal,text="Excluir Miniatura", command=self.pagina_3)
         botao_pagina_3.place(width=200, height=40, x=50, y=160)
+
+        #deixa com o menu com o tamanho inicial
+        self.root.geometry(self.tamanho_inicial)
 
     def pagina_1(self):
         self.muda_janela()
-
-        pagina_1 = tk.Label(self.container_principal, text="Página 1!")
-        pagina_1.pack()
-
+        self.root.geometry("600x400")
         
-        botao_voltar = tk.Button(self.container_principal, text="Voltar a Tela Inicial", command=self.tela_inicial)
+        botao_voltar = tk.Button(self.container_principal, text=" ⬅ Voltar", command=self.tela_inicial)
         botao_voltar.pack(pady=10)
 
     def pagina_2(self):
         self.muda_janela()
+        self.root.geometry("600x400")
         
-        self.container_principal.config(width=2300, height=2300)
-
-        pagina_2 = tk.Label(self.container_principal, text="Página 2!")
-        pagina_2.pack()
-
         botao_voltar = tk.Button(self.container_principal, text="Voltar a Tela Inicial", command=self.tela_inicial)
         botao_voltar.pack(pady=20)
 
     def pagina_3(self):
         self.muda_janela()
+        self.root.geometry("600x400")
         
-        pagina_3 = tk.Label(self.container_principal, text="Página 3!")
-        pagina_3.pack
 
         botao_voltar = tk.Button(self.container_principal, text="Voltar a Tela Inicial", command=self.tela_inicial)
         botao_voltar.pack(pady=30)
@@ -73,3 +84,5 @@ class App:
 root = tk.Tk()
 app = App(root)
 root.mainloop()
+cursor.close()
+conexao.close()
