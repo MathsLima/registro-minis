@@ -1,5 +1,6 @@
 import tkinter as tk
 import mysql.connector
+from tkinter import ttk
 
 conexao = mysql.connector.connect(
     host = 'localhost',
@@ -106,8 +107,41 @@ class App:
         botao_voltar = tk.Button(self.container_principal, text="⬅ Voltar", command=self.tela_inicial)
         botao_voltar.place(width=75, height=25, x=510, y=15)
 
+        comando = f'SELECT * FROM minis'
+        cursor.execute(comando)
+        resultado = cursor.fetchall()
+    
+        #cria a treeview com os dados do banco
+        tv = ttk.Treeview(self.root)
+        tv['show'] = 'headings'
+
+        estilo = ttk.Style(self.root)
+        estilo.theme_use('clam')
+
+        tv["columns"] = ("ID", "Modelo", "Cor", "Marca", "Colecao")
+
+        tv.column("ID", width=50, minwidth=50, anchor=tk.CENTER)
+        tv.column("Modelo", width=100, minwidth=100, anchor=tk.CENTER)
+        tv.column("Cor", width=50, minwidth=50, anchor=tk.CENTER)
+        tv.column("Marca", width=50, minwidth=50, anchor=tk.CENTER)
+        tv.column("Colecao", width=50, minwidth=50, anchor=tk.CENTER)
+
+        tv.heading("ID", text="ID", anchor=tk.CENTER)
+        tv.heading("Modelo", text="Modelo", anchor=tk.CENTER)
+        tv.heading("Cor", text="Cor", anchor=tk.CENTER)
+        tv.heading("Marca", text="Marca", anchor=tk.CENTER)
+        tv.heading("Colecao", text="Colecao", anchor=tk.CENTER)
+
+        i = 0
+        for root in resultado:
+            tv.insert('', i, text='', values=(root[0], root[1], root[2], root[3], root[4]))
+            i = i + 1
+
+        tv.place(width=530, height=300, x=30, y=75)
+
     def pagina_3(self):
         self.muda_janela()
+
         self.root.geometry("600x400")
         
         botao_voltar = tk.Button(self.container_principal, text="⬅ Voltar", command=self.tela_inicial)
@@ -119,8 +153,19 @@ class App:
         comando = f'INSERT INTO minis (modelo, cor, marca, colecao) VALUES ("{modelo}", "{cor}", "{marca}", "{colecao}")'
         cursor.execute(comando)
         conexao.commit()
+    
+    #funcao para consultar o banco
+    def consulta(self):
+        comando = f'SELECT * FROM minis'
+        cursor.execute(comando)
+        resultado = cursor.fetchall()
+        return resultado
 
-#inicia a aplicacao
+    
+
+
+
+#inicia a aplicacao e fecha conexao com banco
 root = tk.Tk()
 app = App(root)
 root.mainloop()
