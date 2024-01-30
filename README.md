@@ -20,6 +20,11 @@ git clone git@github.com:mathslima/registro-minis.git
 miniaturas.mini.sql
 ```
 
+- Instale as depend~encias
+```
+pip install -r requirements.txt
+```
+
 - Altere os dados de usuário e senha na conexão do banco de dados na main.py
 ```
 user = 'seu_usuario'
