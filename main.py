@@ -103,15 +103,58 @@ class App:
     def pagina_2(self):
         self.muda_janela()
         self.root.geometry("600x400")
-        
+
+        label_titulo = tk.Label(self.container_principal, text="Consulta de Miniaturas", font=('Calibri', 18), bg=bg, fg=letras)
+        label_titulo.place(width=300, height=25, x=150, y=15)
+
         botao_voltar = tk.Button(self.container_principal, text="⬅ Voltar", command=self.tela_inicial)
         botao_voltar.place(width=75, height=25, x=510, y=15)
 
+    
+        dados = self.consulta()
+        self.treeview(dados)
+
+
+    def pagina_3(self):
+        self.muda_janela()
+        self.root.geometry("350x300")
+
+        label_titulo = tk.Label(self.container_principal, text="Deletar Miniatura", font=('Calibri', 18), bg=bg, fg=letras)
+        label_titulo.place(width=300, height=25, x=0, y=15)
+        
+        label_id = tk.Label(self.container_principal, text="Digite o ID", font=('Calibri', 15), bg=bg, fg=letras)
+        label_id.place(width=100, height=30, x=125, y=75)
+
+        input_id = tk.Entry(self.container_principal)
+        input_id.place(width=100, height=30, x=125, y=115)
+
+        deletar = tk.Button(self.container_principal, text="Deletar", 
+                              font=('Calibri', 15),
+                              command=lambda: self.deletar(input_id.get()))
+        
+        deletar.place(width=100, height=30, x=125, y=175)
+        
+        botao_voltar = tk.Button(self.container_principal, text="⬅ Voltar", command=self.tela_inicial)
+        botao_voltar.place(width=75, height=25, x=260, y=15)
+
+    
+    #funcao para adicionar miniaturas no banco de dados
+    def adicionar_miniatura(self, modelo, cor, marca, colecao):
+        comando = f'INSERT INTO minis (modelo, cor, marca, colecao) VALUES ("{modelo}", "{cor}", "{marca}", "{colecao}")'
+        cursor.execute(comando)
+        conexao.commit()
+    
+
+    #funcao para consultar o banco
+    def consulta(self):
         comando = f'SELECT * FROM minis'
         cursor.execute(comando)
         resultado = cursor.fetchall()
+        return resultado
     
-        #cria a treeview com os dados do banco
+
+    #funcao para criar a treeview
+    def treeview(self, resultado):
         tv = ttk.Treeview(self.root)
         tv['show'] = 'headings'
 
@@ -139,30 +182,13 @@ class App:
 
         tv.place(width=530, height=300, x=30, y=75)
 
-    def pagina_3(self):
-        self.muda_janela()
+        return tv
 
-        self.root.geometry("600x400")
-        
-        botao_voltar = tk.Button(self.container_principal, text="⬅ Voltar", command=self.tela_inicial)
-        botao_voltar.place(width=75, height=25, x=510, y=15)
 
-    
-    #funcao para adicionar miniaturas no banco de dados
-    def adicionar_miniatura(self, modelo, cor, marca, colecao):
-        comando = f'INSERT INTO minis (modelo, cor, marca, colecao) VALUES ("{modelo}", "{cor}", "{marca}", "{colecao}")'
+    def deletar(self, id):
+        comando = f'DELETE from minis WHERE idminis = {id} '
         cursor.execute(comando)
         conexao.commit()
-    
-    #funcao para consultar o banco
-    def consulta(self):
-        comando = f'SELECT * FROM minis'
-        cursor.execute(comando)
-        resultado = cursor.fetchall()
-        return resultado
-
-    
-
 
 
 #inicia a aplicacao e fecha conexao com banco
