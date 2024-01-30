@@ -32,7 +32,7 @@ password = 'sua_senha'
 ```
 
 #### -Extra
-- Para carregar uma lista com diversos dados no banco, utilize o arquivo
+- Para carregar uma lista com diversos dados no banco, execute o script no arquivo 
 ```
 load_database.py
 ```
