@@ -1,7 +1,6 @@
 import tkinter as tk
 import mysql.connector
 from tkinter import ttk
-from tkinter import messagebox
 
 conexao = mysql.connector.connect(
     host = 'localhost',
@@ -129,6 +128,10 @@ class App:
         self.treeview_pagina_2 = self.treeview(dados)
         self.scrollbar(self.treeview_pagina_2)
 
+        quantidade = self.quantidade()
+        label_quantidade = tk.Label(self.container_principal, text=f'Quantidade: {quantidade}', font=('Calibri', 15), bg=bg, fg=letras)
+        label_quantidade.place(width=300, height=25, x=150, y=40)
+
 
     def pagina_3(self):
         self.muda_janela()
@@ -213,24 +216,36 @@ class App:
         
         treeview.configure(yscrollcommand=scrollbar.set)
     
+
     def alerta_inserido(self):
         popup  =tk.Toplevel(self.root)
         popup.geometry("200x80")
         popup.title("Alerta")
+        popup.resizable(width=False, height=False)
         mensagem_popup = tk.Label(popup, text="Miniatura inserida!", font=('Calibri', 13))
         mensagem_popup.pack(pady=10)
         botao_ok = tk.Button(popup, text="OK", command=popup.destroy)
         botao_ok.pack()
     
+
     def alerta_deletado(self):
         popup  =tk.Toplevel(self.root)
         popup.geometry("200x80")
         popup.title("Alerta")
+        popup.popup.resizable(width=False, height=False)
         mensagem_popup = tk.Label(popup, text="Miniatura Deletada!", font=('Calibri', 13))
         mensagem_popup.pack(pady=10)
         botao_ok = tk.Button(popup, text="OK", command=popup.destroy)
         botao_ok.pack()
 
+
+    def quantidade(self):
+        comando = f'SELECT COUNT(*) FROM minis'
+        cursor.execute(comando)
+        resultado = cursor.fetchone()
+        return resultado[0]
+    
+    
 #inicia a aplicacao e fecha conexao com banco
 root = tk.Tk()
 app = App(root)
