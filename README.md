@@ -8,7 +8,7 @@ Este projeto é um sistema de resgistro de miniaturas com Python utilizando MySQ
 # Bibliotecas utilizdas
 - Tkinter
 - MySQL Connector
--Pandas
+- Pandas
 
 # Como executar este projeto
 - Clone o repositório
