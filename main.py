@@ -1,6 +1,7 @@
 import tkinter as tk
 import mysql.connector
 from tkinter import ttk
+from tkinter import messagebox
 
 conexao = mysql.connector.connect(
     host = 'localhost',
@@ -29,6 +30,9 @@ class App:
 
         #serve para armazenar o tamanho do menu
         self.tamanho_inicial = "300x225"
+
+        #variavel que aramzena a treeview
+        self.treeview_pagina_2 = None
 
         #inicia a tela inicial com o menu
         self.tela_inicial()
@@ -96,7 +100,13 @@ class App:
 
         adicionar = tk.Button(self.container_principal, text="Adicionar na coleção", 
                               font=('Calibri', 15),
-                              command=lambda: self.adicionar_miniatura(input_modelo.get(), input_cor.get(), input_marca.get(), input_colecao.get()))
+                              command=lambda: [self.adicionar_miniatura(input_modelo.get(), input_cor.get(), input_marca.get(), input_colecao.get()),
+                                               input_modelo.delete("0", "end"), 
+                                               input_cor.delete("0", "end"),
+                                               input_marca.delete("0", "end"),
+                                               input_colecao.delete("0", "end"),
+                                               self.alerta_inserido()])
+        
         adicionar.place(width=200, height=30, x=150, y=280)
 
 
@@ -110,9 +120,14 @@ class App:
         botao_voltar = tk.Button(self.container_principal, text="⬅ Voltar", command=self.tela_inicial)
         botao_voltar.place(width=75, height=25, x=510, y=15)
 
-    
+        #se existe uma treeview ela é destruida antes de criar uma nova 
+        if self.treeview_pagina_2:
+            self.treeview_pagina_2.destroy()
+        
         dados = self.consulta()
-        self.treeview(dados)
+        
+        self.treeview_pagina_2 = self.treeview(dados)
+        self.scrollbar(self.treeview_pagina_2)
 
 
     def pagina_3(self):
@@ -130,7 +145,9 @@ class App:
 
         deletar = tk.Button(self.container_principal, text="Deletar", 
                               font=('Calibri', 15),
-                              command=lambda: self.deletar(input_id.get()))
+                              command=lambda: [self.deletar(input_id.get()),
+                                                input_id.delete("0", "end"),
+                                                self.alerta_deletado()])
         
         deletar.place(width=100, height=30, x=125, y=175)
         
@@ -155,9 +172,9 @@ class App:
 
     #funcao para criar a treeview
     def treeview(self, resultado):
-        tv = ttk.Treeview(self.root)
+        tv = ttk.Treeview(self.container_principal)    
         tv['show'] = 'headings'
-
+        
         estilo = ttk.Style(self.root)
         estilo.theme_use('clam')
 
@@ -180,8 +197,7 @@ class App:
             tv.insert('', i, text='', values=(root[0], root[1], root[2], root[3], root[4]))
             i = i + 1
 
-        tv.place(width=530, height=300, x=30, y=75)
-
+        tv.place(width=530, height=300, x=30, y=75)    
         return tv
 
 
@@ -190,6 +206,30 @@ class App:
         cursor.execute(comando)
         conexao.commit()
 
+
+    def scrollbar(self, treeview):
+        scrollbar = ttk.Scrollbar(self.container_principal, orient="vertical", command=treeview.yview)
+        scrollbar.place(x=560, y=75, height=300)
+        
+        treeview.configure(yscrollcommand=scrollbar.set)
+    
+    def alerta_inserido(self):
+        popup  =tk.Toplevel(self.root)
+        popup.geometry("200x80")
+        popup.title("Alerta")
+        mensagem_popup = tk.Label(popup, text="Miniatura inserida!", font=('Calibri', 13))
+        mensagem_popup.pack(pady=10)
+        botao_ok = tk.Button(popup, text="OK", command=popup.destroy)
+        botao_ok.pack()
+    
+    def alerta_deletado(self):
+        popup  =tk.Toplevel(self.root)
+        popup.geometry("200x80")
+        popup.title("Alerta")
+        mensagem_popup = tk.Label(popup, text="Miniatura Deletada!", font=('Calibri', 13))
+        mensagem_popup.pack(pady=10)
+        botao_ok = tk.Button(popup, text="OK", command=popup.destroy)
+        botao_ok.pack()
 
 #inicia a aplicacao e fecha conexao com banco
 root = tk.Tk()
