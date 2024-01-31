@@ -21,7 +21,7 @@ git clone git@github.com:mathslima/registro-minis.git
 miniaturas.mini.sql
 ```
 
-- Instale as depend~encias
+- Instale as dependências
 ```
 pip install -r requirements.txt
 ```
