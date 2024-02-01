@@ -5,7 +5,7 @@ Este projeto é um sistema de resgistro de miniaturas com Python utilizando MySQ
 - Python
 - MySQL
 
-# Bibliotecas utilizdas
+# Bibliotecas utilizadas
 - Tkinter
 - MySQL Connector
 - Pandas
@@ -25,7 +25,7 @@ miniaturas.mini.sql
 ```
 pip install -r requirements.txt
 ```
-
+  
 - Altere os dados de usuário e senha na conexão do banco de dados na main.py
 ```
 user = 'seu_usuario'
@@ -37,3 +37,4 @@ password = 'sua_senha'
 ```
 load_database.py
 ```
+                      
