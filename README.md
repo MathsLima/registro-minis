@@ -1,5 +1,5 @@
-# Sistema de Registo de Miniaturas
-Este projeto é um sistema de resgistro de miniaturas com Python utilizando MySQL.
+# Sistema de Registro de Miniaturas
+Este projeto é um sistema de resgistro de miniaturas em Python e MySQL.
 
 # Tecnologias utilizadas
 - Python
