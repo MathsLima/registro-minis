@@ -35,6 +35,7 @@ class App:
 
         #inicia a tela inicial com o menu
         self.tela_inicial()
+        self.resultados = self.consulta()
     
     #funcao para alterar as paginas
     def muda_janela(self):
@@ -123,13 +124,11 @@ class App:
         if self.treeview_pagina_2:
             self.treeview_pagina_2.destroy()
         
-        dados = self.consulta()
-        
-        self.treeview_pagina_2 = self.treeview(dados)
+        self.treeview_pagina_2 = self.treeview()
         self.scrollbar(self.treeview_pagina_2)
 
-        quantidade = self.quantidade()
-        label_quantidade = tk.Label(self.container_principal, text=f'Quantidade: {quantidade}', font=('Calibri', 15), bg=bg, fg=letras)
+        # quantidade = self.quantidade()
+        label_quantidade = tk.Label(self.container_principal, text=f'Quantidade: {len(self.resultados)}', font=('Calibri', 15), bg=bg, fg=letras)
         label_quantidade.place(width=300, height=25, x=150, y=40)
 
 
@@ -169,46 +168,34 @@ class App:
     def consulta(self):
         comando = f'SELECT * FROM minis'
         cursor.execute(comando)
-        resultado = cursor.fetchall()
-        return resultado
+        return cursor.fetchall()
     
 
     #funcao para criar a treeview
-    def treeview(self, resultado):
+    def treeview(self):
         tv = ttk.Treeview(self.container_principal)    
         tv['show'] = 'headings'
         
         estilo = ttk.Style(self.root)
         estilo.theme_use('clam')
 
-        tv["columns"] = ("ID", "Modelo", "Cor", "Marca", "Colecao")
+        tv["columns"] = ("INDEX", "ID", "Modelo", "Cor", "Marca", "Colecao")
 
-        tv.column("ID", width=50, minwidth=50, anchor=tk.CENTER)
-        tv.column("Modelo", width=100, minwidth=100, anchor=tk.CENTER)
-        tv.column("Cor", width=50, minwidth=50, anchor=tk.CENTER)
-        tv.column("Marca", width=50, minwidth=50, anchor=tk.CENTER)
-        tv.column("Colecao", width=50, minwidth=50, anchor=tk.CENTER)
+        for column_name in tv["columns"]:
+            tv.column(column_name, width=50, minwidth=50, anchor=tk.CENTER)
+            tv.heading(column_name, text=column_name, anchor=tk.CENTER)
 
-        tv.heading("ID", text="ID", anchor=tk.CENTER)
-        tv.heading("Modelo", text="Modelo", anchor=tk.CENTER)
-        tv.heading("Cor", text="Cor", anchor=tk.CENTER)
-        tv.heading("Marca", text="Marca", anchor=tk.CENTER)
-        tv.heading("Colecao", text="Colecao", anchor=tk.CENTER)
+        for i, root in enumerate(self.resultados):
+            tv.insert('', i, text='batata', values=(i, root[0], root[1], root[2], root[3], root[4]))
 
-        i = 0
-        for root in resultado:
-            tv.insert('', i, text='', values=(root[0], root[1], root[2], root[3], root[4]))
-            i = i + 1
+        tv.place(width=530, height=300, x=30, y=75)
 
-        tv.place(width=530, height=300, x=30, y=75)    
         return tv
-
 
     def deletar(self, id):
         comando = f'DELETE from minis WHERE idminis = {id} '
         cursor.execute(comando)
         conexao.commit()
-
 
     def scrollbar(self, treeview):
         scrollbar = ttk.Scrollbar(self.container_principal, orient="vertical", command=treeview.yview)
@@ -237,14 +224,6 @@ class App:
         mensagem_popup.pack(pady=10)
         botao_ok = tk.Button(popup, text="OK", command=popup.destroy)
         botao_ok.pack()
-
-
-    def quantidade(self):
-        comando = f'SELECT COUNT(*) FROM minis'
-        cursor.execute(comando)
-        resultado = cursor.fetchone()
-        return resultado[0]
-    
     
 #inicia a aplicacao e fecha conexao com banco
 root = tk.Tk()
