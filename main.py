@@ -219,7 +219,7 @@ class App:
         popup  =tk.Toplevel(self.root)
         popup.geometry("200x80")
         popup.title("Alerta")
-        popup.popup.resizable(width=False, height=False)
+        popup.resizable(width=False, height=False)
         mensagem_popup = tk.Label(popup, text="Miniatura Deletada!", font=('Calibri', 13))
         mensagem_popup.pack(pady=10)
         botao_ok = tk.Button(popup, text="OK", command=popup.destroy)
